@@ -1,0 +1,15 @@
+{
+  "best_metric": 0.07157142857142858,
+  "best_config": {
+    "num_ref_models": 16,
+    "ref_member_frac": 0.55,
+    "ref_epochs": 20,
+    "ref_lr": 0.001,
+    "ref_weight_decay": 0.0005,
+    "stat_mode": "neg_loss",
+    "feature_mode": "rich",
+    "cal_C": 2.0,
+    "cal_class_weight": "balanced",
+    "ridge_alpha": 1.0
+  }
+}
