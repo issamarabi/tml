@@ -88,14 +88,14 @@ class MembershipDataset(TaskDataset):
 BASE = Path(__file__).resolve().parent
 PUB_PATH = BASE / "pub.pt"
 MODEL_PATH = BASE / "model.pt"
-RESULTS_JSONL = BASE / "lira_search_results-5.jsonl"
-RESULTS_CSV = BASE / "lira_search_results-5.csv"
-BEST_CONFIG_JSON = BASE / "best_lira_config-5.json"
+RESULTS_JSONL = BASE / "lira_search_results-16.jsonl"
+RESULTS_CSV = BASE / "lira_search_results-16.csv"
+BEST_CONFIG_JSON = BASE / "best_lira_config-16.json"
 
 MEAN = [0.7406, 0.5331, 0.7059]
 STD = [0.1491, 0.1864, 0.1301]
 
-DEVICE = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+DEVICE = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
 
 
 # ============================================================
@@ -593,17 +593,17 @@ def run_trial(pub_ds, target_model, cfg: SearchConfig, seed: int, batch_size: in
 # ============================================================
 def build_search_space(args) -> List[SearchConfig]:
     num_ref_models = args.num_ref_models or [16]
-    ref_member_frac = args.ref_member_frac or [0.55, 0.6]
+    ref_member_frac = args.ref_member_frac or [0.5, 0.55]
     ref_epochs = args.ref_epochs or [20]
     ref_lr = args.ref_lr or [1e-3, 5e-4]
-    ref_weight_decay = args.ref_weight_decay or [1e-3, 5e-4]
+    ref_weight_decay = args.ref_weight_decay or [5e-4, 1e-4]
     stat_mode = args.stat_mode or ["neg_loss"]
     tta_mode = args.tta_mode or ["flip"]
     temperature = args.temperature or [1.0]
     feature_mode = args.feature_mode or ["rich"]
-    cal_C = args.cal_C or [1.0, 2.0, 4.0]
+    cal_C = args.cal_C or [4.0]
     cal_class_weight = args.cal_class_weight or ["balanced"]
-    ridge_alpha = args.ridge_alpha or [1.0, 10.0]
+    ridge_alpha = args.ridge_alpha or [1.0]
 
     grid = []
     for combo in itertools.product(
@@ -705,8 +705,8 @@ def main():
     parser = argparse.ArgumentParser(description="Comprehensive hyperparameter search for LiRA-style MIA.")
     parser.add_argument("--mode", choices=["random", "grid"], default="random")
     parser.add_argument("--max-trials", type=int, default=48)
-    parser.add_argument("--seed", type=int, default=1337)
-    parser.add_argument("--batch-size", type=int, default=256)
+    parser.add_argument("--seed", type=int, default=6967)
+    parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--final-ensemble-runs", type=int, default=1)
 
     # Optional explicit search-space overrides.
